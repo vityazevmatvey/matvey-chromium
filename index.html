@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatveyBrowser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #e94560, #533483);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            margin-bottom: 50px;
+        }
+
+        .search-box form {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            width: 500px;
+            max-width: 90vw;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box form:hover {
+            border-color: rgba(233, 69, 96, 0.5);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.2);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            color: #fff;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #888;
+        }
+
+        .search-box button {
+            background: linear-gradient(90deg, #e94560, #533483);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+        }
+
+        .links {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 40px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            min-width: 180px;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(233, 69, 96, 0.5);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .link-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 60px;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🌐 MatveyBrowser</div>
+        <div class="subtitle">Мой браузер — мои правила</div>
+
+        <div class="search-box">
+            <form action="https://ya.ru/search/" method="get" target="_self">
+                <input type="text" name="text" placeholder="Искать в Яндексе..." autocomplete="off">
+                <button type="submit">🔍 Найти</button>
+            </form>
+        </div>
+
+        <div class="links">
+            <a href="https://youtube.com/@matveyvityazev" class="link-card" target="_self">
+                <div class="link-icon">📺</div>
+                <div class="link-name">YouTube</div>
+            </a>
+
+            <a href="https://matvey.vityazev.me" class="link-card" target="_self">
+                <div class="link-icon">🌍</div>
+                <div class="link-name">Мой сайт</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            MatveyBrowser © 2026 | Сделано с ❤️
+        </div>
+    </div>
+</body>
+</html>
