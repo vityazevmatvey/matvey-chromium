@@ -5,64 +5,85 @@ echo ""
 
 # Создаём папку профиля
 PROFILE_DIR="$HOME/.config/matvey-chromium"
-mkdir -p "$PROFILE_DIR"
+mkdir -p "$PROFILE_DIR/Default"
 
 echo "📁 Создаю профиль в $PROFILE_DIR"
 
-# Создаём папку для расширений
-EXTENSIONS_DIR="$PROFILE_DIR/Extensions"
-mkdir -p "$EXTENSIONS_DIR"
+# Копируем главную страницу
+echo "🏠 Устанавливаю главную страницу..."
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cp "$SCRIPT_DIR/index.html" "$PROFILE_DIR/homepage.html"
 
-echo "📦 Настраиваю расширения..."
-
-# Список расширений (ID из Chrome Web Store)
-declare -A EXTENSIONS=(
-    ["uBlock Origin"]="cjpalhdlnbpafiamejdnhcphjbkeiagm"
-    ["Dark Reader"]="eimadpbcbfnmbkopoojfekhnkhdbieeh"
-    ["Enhancer for YouTube"]="enhancerforyoutube"
-    ["JSON Viewer"]="gbmdgpbipfallnflgajpnbphnhibploa"
-)
-
-# Создаём конфиг для политик (для Linux)
-POLICIES_DIR="/etc/opt/chromium/policies/managed"
-if [ -d "/etc/opt/chromium" ]; then
-    echo "🔧 Создаю политики браузера..."
-    sudo mkdir -p "$POLICIES_DIR"
-    sudo tee "$POLICIES_DIR/matvey-chromium.json" > /dev/null <<EOF
+# Создаём Preferences с настройками
+PREFS_FILE="$PROFILE_DIR/Default/Preferences"
+cat > "$PREFS_FILE" <<'PREFS'
 {
-    "ExtensionInstallForcelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm;https://clients2.google.com/service/update2/crx",
-        "eimadpbcbfnmbkopoojfekhnkhdbieeh;https://clients2.google.com/service/update2/crx"
-    ],
-    "BrowserThemeColor": "#1a1a1a"
-}
-EOF
-fi
-
-# Создаём мастер-настройки
-PREFS_FILE="$PROFILE_DIR/Preferences"
-cat > "$PREFS_FILE" <<EOF
-{
+    "homepage": "file:///HOME/.config/matvey-chromium/homepage.html",
+    "homepage_is_newtabpage": false,
     "browser": {
-        "theme": {
-            "use_system": false
+        "show_home_button": true
+    },
+    "default_search_provider": {
+        "name": "Yandex",
+        "search_url": "https://ya.ru/search/?text={searchTerms}",
+        "suggest_url": "https://suggest.yandex.ru/suggest-ff.cgi?part={searchTerms}"
+    },
+    "default_search_provider_data": {
+        "template_url_data": {
+            "keyword": "ya.ru",
+            "short_name": "Yandex"
         }
+    },
+    "session": {
+        "restore_on_startup": 4,
+        "startup_urls": ["file:///HOME/.config/matvey-chromium/homepage.html"]
     },
     "dark_mode": true,
     "extensions": {
         "theme": {
-            "id": "dark"
+            "use_system": false
         }
     }
 }
-EOF
+PREFS
 
-echo "✅ Настройки применены!"
+# Заменяем HOME на реальный путь
+sed -i "s|/HOME|$HOME|g" "$PREFS_FILE"
+
+echo "🔍 Настраиваю Яндекс как поисковую систему..."
+
+# Создаём Local State
+LOCAL_STATE="$PROFILE_DIR/Local State"
+cat > "$LOCAL_STATE" <<'STATE'
+{
+    "browser": {
+        "enabled_labs_experiments": ["dark-mode"]
+    }
+}
+STATE
+
+# Создаём алиас для удобства
+ALIAS_CMD="alias matvey-chromium='ungoogled-chromium --user-data-dir=$PROFILE_DIR'"
+BASHRC="$HOME/.bashrc"
+
+if ! grep -q "matvey-chromium" "$BASHRC" 2>/dev/null; then
+    echo "" >> "$BASHRC"
+    echo "# MatveyBrowser" >> "$BASHRC"
+    echo "$ALIAS_CMD" >> "$BASHRC"
+    echo "💾 Добавил алиас в ~/.bashrc"
+fi
+
 echo ""
-echo "🚀 Запускай браузер:"
+echo "✅ Установка завершена!"
+echo ""
+echo "🚀 Запуск:"
+echo "   matvey-chromium"
+echo ""
+echo "   или"
+echo ""
 echo "   ungoogled-chromium --user-data-dir=$PROFILE_DIR"
 echo ""
-echo "💡 Совет: создай алиас в ~/.bashrc:"
-echo "   alias matvey-chromium='ungoogled-chromium --user-data-dir=$PROFILE_DIR'"
+echo "📝 Перезагрузи терминал или выполни:"
+echo "   source ~/.bashrc"
 echo ""
-echo "🎉 Готово! Приятного сёрфинга!"
+echo "🎉 Приятного сёрфинга!"
